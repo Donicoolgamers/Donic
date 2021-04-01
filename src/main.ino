@@ -1,3 +1,9 @@
+/*
+    Donic Arduino project
+
+    Read README.md for pin configuration
+*/
+
 #include <LiquidCrystal_I2C.h>
 
 #define ECHO 11
@@ -29,8 +35,7 @@ void setup() {
     digitalWrite(TRIG, LOW);
 
     Serial.begin(9600);
-
-    delay(100);
+    delay(1000);
     lcd.clear();
 }
 
@@ -70,14 +75,7 @@ void loop() {
 
 void drawDistance(int distance) {
     int index  = map(distance, 0, 430, 0, 16);
-  
-    // if (distance > 500) {
-    //     lcd.setCursor(0,1);
-    //     lcd.print("                ");
-    //     lcd.setCursor(0,1);
-    //     lcd.print("OoR");
-    //     return;
-    // }
+
 
     // Draw empty bar
     lcd.setCursor(0,1);
