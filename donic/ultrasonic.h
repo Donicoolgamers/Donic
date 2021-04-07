@@ -1,3 +1,6 @@
+#ifndef ultrasonic_h
+#define ultrasonic_h
+
 class Ultrasonic {
     private:
         double speedAir = 0.034;
@@ -33,3 +36,5 @@ class Ultrasonic {
             return dist;
         };
 };
+
+#endif
