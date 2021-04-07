@@ -1,3 +1,6 @@
+#ifndef chars_h
+#define chars_h
+
 byte loadingbar[7][8] = {
 	{
 		0b01111,
@@ -70,3 +73,4 @@ byte loadingbar[7][8] = {
 		0b11110
 	}
 };
+#endif
