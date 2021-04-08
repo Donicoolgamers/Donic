@@ -3,5 +3,5 @@
     "programmer": "arduino:avrisp",
     "sketch": "donic\\donic.ino",
     "output": "../ArduinoOutput",
-    "port": "COM3"
+    "port": "COM4"
 }
