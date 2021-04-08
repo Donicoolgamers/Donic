@@ -57,6 +57,7 @@ void loop() {
     String distanceInput = Serial.readStringUntil('\n');
     distance = distanceInput.toInt();
     #endif
+    
     Serial.print("Distance: ");
     Serial.print(distance);
     Serial.print(" cm\n");
