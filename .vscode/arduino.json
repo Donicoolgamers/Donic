@@ -1,7 +1,0 @@
-{
-    "board": "arduino:avr:uno",
-    "programmer": "arduino:avrisp",
-    "sketch": "donic\\donic.ino",
-    "output": "../ArduinoOutput",
-    "port": "COM4"
-}
