@@ -11,8 +11,8 @@ class Ultrasonic {
     public:
         Ultrasonic(int echoPin, int trigPin)
         {
-            echo = echo;
-            trig = trig;
+            echo = echoPin;
+            trig = trigPin;
         };
         void init()
         {

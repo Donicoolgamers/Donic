@@ -43,7 +43,7 @@ void loop() {
 
     Serial.print("Distance: ");
     Serial.print(distance);
-    Serial.print(" cm");
+    Serial.println(" cm");
 
     screen.drawDistance(distance);
 
