@@ -11,6 +11,7 @@
 
 #include "ultrasonic.h"
 #include "screens.h"
+#include "buzzer.h"
 
 // Pins
 #define ECHO 11
@@ -50,9 +51,11 @@ void setup() {
 }
 
 void loop() {
+
     #ifndef ULTRASONE
     distance = sonic.distance();
     #endif
+
     #ifdef ULTRASONE
     String distanceInput = Serial.readStringUntil('\n');
     distance = distanceInput.toInt();
