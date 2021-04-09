@@ -17,7 +17,7 @@ public:
     void playSound(int, int);
 };
 
-void Buzzer::playSound(int frequency, int time)
+void Buzzer::playSound(int frequency, int time = 1000)
 {
     tone(pin, frequency);
     delay(time);
