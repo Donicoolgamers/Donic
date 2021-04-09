@@ -7,3 +7,8 @@ Arduino project for sensing distance and giving feedback to the user.
 ### LCD
 - SDA on pin A4
 - SCL on pin A5
+
+### Joystick
+- VRx on pin A0
+- VRy on pin A1
+- SW on pin 2

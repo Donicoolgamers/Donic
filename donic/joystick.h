@@ -20,6 +20,7 @@ class Joystick{
             pinMode(sw, INPUT_PULLUP);
         }
         void readValues();
+        int getDirection();
 
         // getters
         int getX(){return xPos;};
@@ -29,10 +30,41 @@ class Joystick{
 
 void Joystick::readValues()
 {
-    xPos = analogRead(vrx);
-    yPos = analogRead(vry);
+    xPos = map(analogRead(vrx), 0, 1023, -100, 100);
+    yPos = map(analogRead(vry), 0, 1023, -100, 100);
     pressed = digitalRead(sw);
     
+}
+/*
+* return values: 
+* 0 : left
+* 1: down
+* 2: right
+* 3: up
+* 4: not clear
+*/
+int Joystick::getDirection()
+{
+    readValues();
+    if(yPos >= 90)
+    {
+        return 0;
+    }
+    else if(xPos >= 90)
+    {
+        return 1;
+    }
+    else if(yPos <= -90)
+    {
+        return 2;
+    }
+    else if(xPos <= -80)
+    {
+        return 3;
+    }
+    else{
+        return 4;
+    }
 }
 
 #endif

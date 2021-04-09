@@ -14,22 +14,18 @@
 #include "ultrasonic.h"
 #include "screens.h"
 #include "buzzer.h"
-#include "joystick.h"
 
 // Pins
 #define ECHO 11
 #define TRIG 12
 
-#define JOYX A0
-#define JOYY A1
-#define JOYSW 2
 
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 Screen screen(&lcd);
 
-Joystick joystick(JOYSW, JOYX , JOYY);
+
 
 Ultrasonic sonic(ECHO, TRIG);
 
@@ -37,10 +33,14 @@ long time;
 int distance;
 
 void setup() {
+    Serial.begin(9600);
     
     screen.init();
     joystick.init();
     screen.drawWelcome();
+    delay(1000);
+  
+    screen.drawStartMenu();
 
     // Loading
     for (int i = 0; i < 7; i++)
@@ -53,7 +53,7 @@ void setup() {
     sonic.init();
     #endif
 
-    Serial.begin(9600);
+    
     
 
     #ifdef ULTRASONE
@@ -65,11 +65,11 @@ void setup() {
     #endif
 
     delay(1000);
-    lcd.clear();
+    
 }
 
 void loop() {
-
+/*
     #ifndef ULTRASONE
     distance = sonic.distance();
     #endif
@@ -100,7 +100,17 @@ void loop() {
     #endif
 
     screen.drawDistance(distance);
-
+*/
+    /*
+    joystick.readValues();
+    Serial.print("x: ");
+    Serial.print(joystick.getX());
+    Serial.print("\n");
+    Serial.print("y: ");
+    Serial.print(joystick.getY());
+    Serial.print("\n");
+    */
+    
 
     delay(1000);
 }
