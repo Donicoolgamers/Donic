@@ -33,6 +33,12 @@ class Ultrasonic {
             time = pulseIn(echo, HIGH);
             // s = t * v | v_air = 340 m/s | travels back and forth so /2
             dist = time * speedAir/2;
+
+            #ifdef DEBUG
+            Serial.print("SONIC distance: ");
+            Serial.println(dist);
+            #endif
+
             return dist;
         };
 };

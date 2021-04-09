@@ -4,6 +4,9 @@
     Read README.md for pin configuration
 */
 
+//define this if you want all debug info in serial
+#define DEBUG
+
 //define this if you dont want to use ULTRASONE sensor
 //#define ULTRASONE
 
@@ -15,46 +18,38 @@
 #include "screens.h"
 #include "buzzer.h"
 
-// Pins
+// Pin setup
 #define ECHO 11
 #define TRIG 12
 
+#define JOYX A0
+#define JOYY A1
+#define JOYSW 2
 
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-Screen screen(&lcd);
-
-
+Joystick joystick(JOYSW, JOYX, JOYY);
 
 Ultrasonic sonic(ECHO, TRIG);
 
-long time;
-int distance;
+Screen screen(&lcd, &joystick);
+
+int mode, distance;
 
 void setup() {
     Serial.begin(9600);
     
     screen.init();
     joystick.init();
+
     screen.drawWelcome();
     delay(1000);
-  
-    screen.drawStartMenu();
-
-    // Loading
-    for (int i = 0; i < 7; i++)
-    {
-        lcd.createChar(i, loadingbar[i]);
-    }
 
     // Ultrasonic sensor
     #ifndef ULTRASONE
     sonic.init();
     #endif
-
-    
-    
 
     #ifdef ULTRASONE
     Serial.println("--------------------DEBUG MODE : no ultrasone sensor--------------------");
@@ -64,12 +59,11 @@ void setup() {
     Serial.println("--------------------DEBUG MODE : joystick debugging--------------------");
     #endif
 
-    delay(1000);
-    
+    mode = screen.StartMenu();
 }
 
 void loop() {
-/*
+    
     #ifndef ULTRASONE
     distance = sonic.distance();
     #endif
@@ -77,12 +71,6 @@ void loop() {
     #ifdef ULTRASONE
     String distanceInput = Serial.readStringUntil('\n');
     distance = distanceInput.toInt();
-    #endif
-    
-    #ifndef JOYSTICK
-    Serial.print("Distance: ");
-    Serial.print(distance);
-    Serial.print(" cm\n");
     #endif
 
     #ifdef JOYSTICK
@@ -99,18 +87,25 @@ void loop() {
     Serial.print("\n");
     #endif
 
-    screen.drawDistance(distance);
-*/
-    /*
-    joystick.readValues();
-    Serial.print("x: ");
-    Serial.print(joystick.getX());
-    Serial.print("\n");
-    Serial.print("y: ");
-    Serial.print(joystick.getY());
-    Serial.print("\n");
-    */
     
 
-    delay(1000);
+    switch (mode)
+    {
+    case 0:
+        screen.Blind(distance);
+        break;
+    case 1: //Measuring
+        screen.Measuring(distance);
+        break;
+    case 2: //SocialDistance
+        screen.SocialDistance(distance);
+        break;
+    default:
+        lcd.clear();
+        lcd.print("Wrong mode???");
+        delay(1000);
+        mode = screen.StartMenu();
+        break;
+    }
+    delay(100);
 }
