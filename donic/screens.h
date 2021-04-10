@@ -139,7 +139,7 @@ void Screen::drawDistance(int distance)
 void Screen::drawStartMenu(int option)
 {
     lcd->clear();
-
+    delay(50);
     // Draw arrows
     lcd->setCursor(0, 1);
     lcd->write(byte(0b01111111));

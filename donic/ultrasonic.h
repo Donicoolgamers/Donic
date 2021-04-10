@@ -30,8 +30,8 @@ class Ultrasonic {
             digitalWrite(trig, HIGH);
             delayMicroseconds(10);
             digitalWrite(trig, LOW);
-
-            time = pulseIn(echo, HIGH);
+            //29060 is about how many microseconds it takes for 5m 
+            time = pulseIn(echo, HIGH, 29060);
             // s = t * v | v_air = 340 m/s | travels back and forth so /2
             dist = time * speedAir/2;
             #endif
