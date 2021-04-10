@@ -33,7 +33,7 @@ Joystick joystick(JOYSW, JOYX, JOYY);
 
 Ultrasonic sonic(ECHO, TRIG);
 
-Screen screen(&lcd, &joystick);
+Screen screen(&lcd, &joystick, &sonic);
 
 int mode, distance;
 
@@ -59,7 +59,7 @@ void setup() {
     Serial.println("--------------------DEBUG MODE : joystick debugging--------------------");
     #endif
 
-    mode = screen.StartMenu();
+    screen.StartMenu();
 }
 
 void loop() {
@@ -68,10 +68,7 @@ void loop() {
     distance = sonic.distance();
     #endif
 
-    #ifdef ULTRASONE
-    String distanceInput = Serial.readStringUntil('\n');
-    distance = distanceInput.toInt();
-    #endif
+  
 
     #ifdef JOYSTICK
     joystick.readValues();
@@ -88,8 +85,8 @@ void loop() {
     #endif
 
     
-
-    switch (mode)
+    
+    switch (screen.mode)
     {
     case 0:
         screen.Blind(distance);
@@ -104,7 +101,7 @@ void loop() {
         lcd.clear();
         lcd.print("Wrong mode???");
         delay(1000);
-        mode = screen.StartMenu();
+        screen.StartMenu();
         break;
     }
     delay(100);

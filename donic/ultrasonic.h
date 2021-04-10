@@ -23,6 +23,7 @@ class Ultrasonic {
         // Returns distance in cm
         int distance()
         {
+            #ifndef ULTRASONE
             digitalWrite(trig, LOW);
             delayMicroseconds(5);
 
@@ -33,7 +34,12 @@ class Ultrasonic {
             time = pulseIn(echo, HIGH);
             // s = t * v | v_air = 340 m/s | travels back and forth so /2
             dist = time * speedAir/2;
+            #endif
 
+            #ifdef ULTRASONE
+            String distanceInput = Serial.readStringUntil('\n');
+            dist = distanceInput.toInt();
+            #endif
             #ifdef DEBUG
             Serial.print("SONIC distance: ");
             Serial.println(dist);

@@ -4,7 +4,8 @@
 class Joystick{
     private:
         int sw,vrx,vry;
-        int xPos, yPos, pressed;
+        int xPos, yPos;
+        boolean pressed;
     public:
     
         Joystick(int SW, int VRX, int VRY)
@@ -25,7 +26,7 @@ class Joystick{
         // getters
         int getX(){return xPos;};
         int getY(){return yPos;};
-        int getPressed(){return pressed;};
+        bool getPressed(){return !pressed;};
 };
 
 void Joystick::readValues()

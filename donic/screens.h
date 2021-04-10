@@ -4,22 +4,28 @@
 #include "LiquidCrystal_I2C.h"
 #include "chars.h"
 #include "joystick.h"
+#include "ultrasonic.h"
 
 #define JOYX A0
 #define JOYY A1
 #define JOYSW 2
+
+
+
 
 class Screen
 {
 private:
     LiquidCrystal_I2C *lcd;
     Joystick *joystick;
-    int mode = 0;
+    Ultrasonic *sonic;
 public:
-    Screen(LiquidCrystal_I2C *LCD, Joystick *Joystick)
+    int mode = 0;
+    Screen(LiquidCrystal_I2C *LCD, Joystick *Joystick, Ultrasonic *Sonic)
     {
         lcd = LCD;
         joystick = Joystick;
+        sonic = Sonic;
     };
     void init()
     {
@@ -37,7 +43,7 @@ public:
 
     /* Methods for logic */
     /* Return index of selected mode*/
-    int StartMenu();
+    void StartMenu();
     void Blind(int distance);
     void Measuring(int distance);
     void SocialDistance(int distance);
@@ -170,13 +176,13 @@ void Screen::drawStartMenu(int option)
     }
 };
 
-int Screen::StartMenu()
+void Screen::StartMenu()
 {
     int index = 0;
     int previous = 0;
     bool selected = false;
     int direction;
-    int pressed;
+    bool pressed = false;
 
     // Initialize custom characters and draw first screen
     lcd->createChar(0 , sunglasses1[0]);
@@ -197,8 +203,8 @@ int Screen::StartMenu()
             direction = joystick->getDirection();
             pressed = joystick->getPressed();
             
-        } while (!(direction == 0 || direction == 2) && pressed != 0);
-        if (pressed == 0)
+        } while (!(direction == 0 || direction == 2) && pressed != true);
+        if (pressed == true)
         {
             selected = true;
         }
@@ -243,43 +249,46 @@ int Screen::StartMenu()
     Serial.println(index);
     #endif
 
-    return index;
+    mode = index;
 };
 
 void Screen::Blind(int distance)
 {
-    boolean pressed = false;
+    bool pressed = false;
     while (pressed == false)
     {
+        distance = sonic->distance();
         this->drawDistance(distance);
         joystick->readValues();
         pressed = joystick->getPressed();
     }
-    return;
+    this->StartMenu();
 }
 
 void Screen::Measuring(int distance)
 {
-    boolean pressed = false;
+    bool pressed = false;
     while (pressed == false)
     {
+        distance = sonic->distance();
         this->drawDistance(distance);
         joystick->readValues();
         pressed = joystick->getPressed();
     }
-    return;
+    this->StartMenu();
 }
 
 void Screen::SocialDistance(int distance)
 {
-    boolean pressed = false;
+    bool pressed = false;
     while (pressed == false)
     {
+        distance = sonic->distance();
         this->drawDistance(distance);
         joystick->readValues();
         pressed = joystick->getPressed();
     }
-    return;
+    this->StartMenu();
 }
 
 #endif
