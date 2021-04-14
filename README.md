@@ -13,3 +13,7 @@ Arduino project for sensing distance and giving feedback to the user.
 - VRx on pin A0
 - VRy on pin A1
 - SW on pin 2
+
+
+### DC MOTOR
+- pin 3 (the cables go to a diode)

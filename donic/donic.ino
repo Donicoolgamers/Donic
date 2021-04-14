@@ -17,6 +17,7 @@
 #include "ultrasonic.h"
 #include "screens.h"
 #include "buzzer.h"
+#include "motor.h"
 
 // Pin setup
 #define ECHO 11
@@ -25,6 +26,8 @@
 #define JOYX A0
 #define JOYY A1
 #define JOYSW 2
+
+#define MOTOR 3
 
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -35,11 +38,16 @@ Ultrasonic sonic(ECHO, TRIG);
 
 Screen screen(&lcd, &joystick, &sonic);
 
+Motor motor(MOTOR);
+
 int mode, distance;
 
 void setup() {
     Serial.begin(9600);
-    
+    motor.init();
+  
+    motor.burst(200, 10);   
+     
     screen.init();
     joystick.init();
 
