@@ -3,7 +3,6 @@
 
 class Ultrasonic {
     private:
-        double speedAir = 0.034;
         long time;
         int dist;
         int echo, trig;
@@ -20,8 +19,10 @@ class Ultrasonic {
             pinMode(trig, OUTPUT);
             digitalWrite(trig, LOW);
         }
-        // Returns distance in cm
-        int distance()
+        /** Returns distance measures from ultrasonic
+         * @param metric if true will return in cm, if false will return in inches.
+         */
+        int distance(bool metric = true)
         {
             #ifndef ULTRASONE
             digitalWrite(trig, LOW);
@@ -32,8 +33,13 @@ class Ultrasonic {
             digitalWrite(trig, LOW);
             //29060 is about how many microseconds it takes for 5m 
             time = pulseIn(echo, HIGH, 29060);
+
             // s = t * v | v_air = 340 m/s | travels back and forth so /2
-            dist = time * speedAir/2;
+            if (metric)
+                dist = time * 0.034/2;
+            else
+                dist = time * 0.0133/2;
+
             #endif
 
             #ifdef ULTRASONE
