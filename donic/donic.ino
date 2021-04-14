@@ -71,13 +71,6 @@ void setup() {
 }
 
 void loop() {
-    
-    #ifndef ULTRASONE
-    distance = sonic.distance();
-    #endif
-
-  
-
     #ifdef JOYSTICK
     joystick.readValues();
     
@@ -92,18 +85,22 @@ void loop() {
     Serial.print("\n");
     #endif
 
-    
+    #ifndef ULTRASONE
+    distance = sonic.distance();
+    #endif
+
+    joystick.readValues();
     
     switch (screen.mode)
     {
     case 0:
-        screen.Blind(distance);
+        screen.drawBlind(distance);
         break;
     case 1: //Measuring
-        screen.Measuring(distance);
+        screen.drawMeasuring(distance);
         break;
     case 2: //SocialDistance
-        screen.SocialDistance(distance);
+        screen.drawSocialDistance(distance);
         break;
     default:
         lcd.clear();
@@ -112,5 +109,9 @@ void loop() {
         screen.StartMenu();
         break;
     }
-    delay(100);
+
+    if(joystick.getPressed())
+    {
+        screen.StartMenu();
+    }
 }

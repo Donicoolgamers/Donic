@@ -6,13 +6,6 @@
 #include "joystick.h"
 #include "ultrasonic.h"
 
-#define JOYX A0
-#define JOYY A1
-#define JOYSW 2
-
-
-
-
 class Screen
 {
 private:
@@ -20,7 +13,7 @@ private:
     Joystick *joystick;
     Ultrasonic *sonic;
 public:
-    int mode = 0;
+    int mode = 0, refreshTime = 500;
     Screen(LiquidCrystal_I2C *LCD, Joystick *Joystick, Ultrasonic *Sonic)
     {
         lcd = LCD;
@@ -40,13 +33,14 @@ public:
     void drawBar(int progress, int start = 0, int end = 100);
     void drawDistance(int distance);
     void drawStartMenu(int option);
+    void drawBlind(int distance);
+    void drawMeasuring(int distance);
+    void drawSocialDistance(int distance);
 
     /* Methods for logic */
     /* Return index of selected mode*/
     void StartMenu();
-    void Blind(int distance);
-    void Measuring(int distance);
-    void SocialDistance(int distance);
+    bool DelayHasPassed(int interval);
 };
 
 void Screen::drawWelcome()
@@ -252,43 +246,41 @@ void Screen::StartMenu()
     mode = index;
 };
 
-void Screen::Blind(int distance)
+void Screen::drawBlind(int distance)
 {
-    bool pressed = false;
-    while (pressed == false)
-    {
-        distance = sonic->distance();
+    if (this->DelayHasPassed(refreshTime))
         this->drawDistance(distance);
-        joystick->readValues();
-        pressed = joystick->getPressed();
-    }
-    this->StartMenu();
 }
 
-void Screen::Measuring(int distance)
+void Screen::drawMeasuring(int distance)
 {
-    bool pressed = false;
-    while (pressed == false)
-    {
-        distance = sonic->distance();
+    if (this->DelayHasPassed(refreshTime))
         this->drawDistance(distance);
-        joystick->readValues();
-        pressed = joystick->getPressed();
-    }
-    this->StartMenu();
 }
 
-void Screen::SocialDistance(int distance)
+void Screen::drawSocialDistance(int distance)
 {
-    bool pressed = false;
-    while (pressed == false)
-    {
-        distance = sonic->distance();
+    if (this->DelayHasPassed(refreshTime))
         this->drawDistance(distance);
-        joystick->readValues();
-        pressed = joystick->getPressed();
+}
+
+/**Will return true if time since last call is larger than delay.
+ * This function won't call delay() so it won't stop code after it from running. 
+ */
+bool Screen::DelayHasPassed(int delay)
+{
+    static unsigned long previousTime = 0;
+    unsigned long currentTime = millis();
+
+    if (currentTime - previousTime >= delay)
+    {
+        previousTime = currentTime;
+        return true;
     }
-    this->StartMenu();
+    else
+    {
+        return false;
+    }
 }
 
 #endif
