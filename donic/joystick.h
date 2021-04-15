@@ -35,13 +35,11 @@ void Joystick::readValues()
     yPos = map(analogRead(vry), 0, 1023, -100, 100);
     pressed = digitalRead(sw);
 
-    #ifdef DEBUG
+    #ifdef VERBOSE
     Serial.print("x: ");
-    Serial.print(this->getX());
-    Serial.print("\n");
+    Serial.println(this->getX());
     Serial.print("y: ");
-    Serial.print(this->getY());
-    Serial.print("\n");
+    Serial.println(this->getY());
     #endif
 }
 /*
