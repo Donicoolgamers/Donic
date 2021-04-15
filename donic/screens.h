@@ -5,6 +5,7 @@
 #include "chars.h"
 #include "joystick.h"
 #include "ultrasonic.h"
+#include "util.h"
 
 class Screen
 {
@@ -12,13 +13,16 @@ private:
     LiquidCrystal_I2C *lcd;
     Joystick *joystick;
     Ultrasonic *sonic;
+    Util *util;
 public:
     int mode = 0, refreshTime = 500;
-    Screen(LiquidCrystal_I2C *LCD, Joystick *Joystick, Ultrasonic *Sonic)
+    unsigned long previousTime = 0;
+    Screen(LiquidCrystal_I2C *LCD, Joystick *Joystick, Ultrasonic *Sonic, Util *Util)
     {
         lcd = LCD;
         joystick = Joystick;
         sonic = Sonic;
+        util = Util;
     };
     void init()
     {
@@ -27,7 +31,9 @@ public:
         lcd->backlight();
     }
 
-    /* Methods to draw */
+    /* Return index of selected mode*/
+    void StartMenu();
+
     void drawWelcome();
     void drawLoadingbar(int progress, int start = 0, int end = 100);
     void drawBar(int progress, int start = 0, int end = 100);
@@ -36,11 +42,6 @@ public:
     void drawBlind(int distance);
     void drawMeasuring(int distance);
     void drawSocialDistance(int distance);
-
-    /* Methods for logic */
-    /* Return index of selected mode*/
-    void StartMenu();
-    bool DelayHasPassed(int interval);
 };
 
 void Screen::drawWelcome()
@@ -220,7 +221,7 @@ void Screen::StartMenu()
                 break;
             }
 
-            #ifdef DEBUG
+            #ifdef VERBOSE
             Serial.print("Mode selection: ");
             Serial.println(index);
             #endif
@@ -238,7 +239,7 @@ void Screen::StartMenu()
         delay(500);
     }
 
-    #ifdef DEBUG
+    #ifdef VERBOSE
     Serial.print("Selected mode: ");
     Serial.println(index);
     #endif
@@ -248,39 +249,20 @@ void Screen::StartMenu()
 
 void Screen::drawBlind(int distance)
 {
-    if (this->DelayHasPassed(refreshTime))
+    if (util->DelayHasPassed(previousTime, refreshTime))
         this->drawDistance(distance);
 }
 
 void Screen::drawMeasuring(int distance)
 {
-    if (this->DelayHasPassed(refreshTime))
+    if (util->DelayHasPassed(previousTime, refreshTime))
         this->drawDistance(distance);
 }
 
 void Screen::drawSocialDistance(int distance)
 {
-    if (this->DelayHasPassed(refreshTime))
+    if (util->DelayHasPassed(previousTime, refreshTime))
         this->drawDistance(distance);
-}
-
-/**Will return true if time since last call is larger than delay.
- * This function won't call delay() so it won't stop code after it from running. 
- */
-bool Screen::DelayHasPassed(int delay)
-{
-    static unsigned long previousTime = 0;
-    unsigned long currentTime = millis();
-
-    if (currentTime - previousTime >= delay)
-    {
-        previousTime = currentTime;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
 }
 
 #endif
