@@ -5,7 +5,7 @@
 */
 
 //define this if you want all debug info in serial
-#define DEBUG
+//#define VERBOSE
 
 //define this if you dont want to use ULTRASONE sensor
 //#define ULTRASONE
@@ -29,15 +29,11 @@
 
 #define MOTOR 3
 
-
+Util util;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
-
 Joystick joystick(JOYSW, JOYX, JOYY);
-
 Ultrasonic sonic(ECHO, TRIG);
-
-Screen screen(&lcd, &joystick, &sonic);
-
+Screen screen(&lcd, &joystick, &sonic, &util);
 Motor motor(MOTOR);
 
 int mode, distance;
@@ -59,25 +55,22 @@ void setup() {
     sonic.init();
     #endif
 
+    #ifdef VERBOSE
+    Serial.println("--------------------DEBUG MODE : verbose output-------------------------");
+    #endif
+
     #ifdef ULTRASONE
     Serial.println("--------------------DEBUG MODE : no ultrasone sensor--------------------");
     #endif
 
     #ifdef JOYSTICK
-    Serial.println("--------------------DEBUG MODE : joystick debugging--------------------");
+    Serial.println("--------------------DEBUG MODE : joystick debugging---------------------");
     #endif
 
     screen.StartMenu();
 }
 
 void loop() {
-    
-    #ifndef ULTRASONE
-    distance = sonic.distance();
-    #endif
-
-  
-
     #ifdef JOYSTICK
     joystick.readValues();
     
@@ -92,18 +85,22 @@ void loop() {
     Serial.print("\n");
     #endif
 
-    
+    #ifndef ULTRASONE
+    distance = sonic.distance();
+    #endif
+
+    joystick.readValues();
     
     switch (screen.mode)
     {
     case 0:
-        screen.Blind(distance);
+        screen.drawBlind(distance);
         break;
     case 1: //Measuring
-        screen.Measuring(distance);
+        screen.drawMeasuring(distance);
         break;
     case 2: //SocialDistance
-        screen.SocialDistance(distance);
+        screen.drawSocialDistance(distance);
         break;
     default:
         lcd.clear();
@@ -112,5 +109,9 @@ void loop() {
         screen.StartMenu();
         break;
     }
-    delay(100);
+
+    if(joystick.getPressed())
+    {
+        screen.StartMenu();
+    }
 }

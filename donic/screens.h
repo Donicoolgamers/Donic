@@ -5,13 +5,7 @@
 #include "chars.h"
 #include "joystick.h"
 #include "ultrasonic.h"
-
-#define JOYX A0
-#define JOYY A1
-#define JOYSW 2
-
-
-
+#include "util.h"
 
 class Screen
 {
@@ -19,13 +13,16 @@ private:
     LiquidCrystal_I2C *lcd;
     Joystick *joystick;
     Ultrasonic *sonic;
+    Util *util;
 public:
-    int mode = 0;
-    Screen(LiquidCrystal_I2C *LCD, Joystick *Joystick, Ultrasonic *Sonic)
+    int mode = 0, refreshTime = 500;
+    unsigned long previousTime = 0;
+    Screen(LiquidCrystal_I2C *LCD, Joystick *Joystick, Ultrasonic *Sonic, Util *Util)
     {
         lcd = LCD;
         joystick = Joystick;
         sonic = Sonic;
+        util = Util;
     };
     void init()
     {
@@ -34,19 +31,17 @@ public:
         lcd->backlight();
     }
 
-    /* Methods to draw */
+    /* Return index of selected mode*/
+    void StartMenu();
+
     void drawWelcome();
     void drawLoadingbar(int progress, int start = 0, int end = 100);
     void drawBar(int progress, int start = 0, int end = 100);
     void drawDistance(int distance);
     void drawStartMenu(int option);
-
-    /* Methods for logic */
-    /* Return index of selected mode*/
-    void StartMenu();
-    void Blind(int distance);
-    void Measuring(int distance);
-    void SocialDistance(int distance);
+    void drawBlind(int distance);
+    void drawMeasuring(int distance);
+    void drawSocialDistance(int distance);
 };
 
 void Screen::drawWelcome()
@@ -226,7 +221,7 @@ void Screen::StartMenu()
                 break;
             }
 
-            #ifdef DEBUG
+            #ifdef VERBOSE
             Serial.print("Mode selection: ");
             Serial.println(index);
             #endif
@@ -244,7 +239,7 @@ void Screen::StartMenu()
         delay(500);
     }
 
-    #ifdef DEBUG
+    #ifdef VERBOSE
     Serial.print("Selected mode: ");
     Serial.println(index);
     #endif
@@ -252,43 +247,22 @@ void Screen::StartMenu()
     mode = index;
 };
 
-void Screen::Blind(int distance)
+void Screen::drawBlind(int distance)
 {
-    bool pressed = false;
-    while (pressed == false)
-    {
-        distance = sonic->distance();
+    if (util->DelayHasPassed(previousTime, refreshTime))
         this->drawDistance(distance);
-        joystick->readValues();
-        pressed = joystick->getPressed();
-    }
-    this->StartMenu();
 }
 
-void Screen::Measuring(int distance)
+void Screen::drawMeasuring(int distance)
 {
-    bool pressed = false;
-    while (pressed == false)
-    {
-        distance = sonic->distance();
+    if (util->DelayHasPassed(previousTime, refreshTime))
         this->drawDistance(distance);
-        joystick->readValues();
-        pressed = joystick->getPressed();
-    }
-    this->StartMenu();
 }
 
-void Screen::SocialDistance(int distance)
+void Screen::drawSocialDistance(int distance)
 {
-    bool pressed = false;
-    while (pressed == false)
-    {
-        distance = sonic->distance();
+    if (util->DelayHasPassed(previousTime, refreshTime))
         this->drawDistance(distance);
-        joystick->readValues();
-        pressed = joystick->getPressed();
-    }
-    this->StartMenu();
 }
 
 #endif
