@@ -29,16 +29,20 @@
 
 #define MOTOR 3
 
+#define BUZZER 9
+
 Util util;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 Joystick joystick(JOYSW, JOYX, JOYY);
 Ultrasonic sonic(ECHO, TRIG);
 Screen screen(&lcd, &joystick, &sonic, &util);
 Motor motor(MOTOR);
+Buzzer buzzer(BUZZER);
 
 int mode, distance;
 
 void setup() {
+    buzzer.init();
     Serial.begin(9600);
     motor.init();
   
