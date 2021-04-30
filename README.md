@@ -23,3 +23,6 @@ Arduino project for sensing distance and giving feedback to the user.
 ### DC MOTOR
 
 - pin 3 (the cables go to a diode)
+
+### Buzzer
+- pin 9
