@@ -20,7 +20,7 @@ class Util
     public:
     /**Will return true if time since last call is larger than delay.
      * This function won't call delay() so it won't stop code after it from running.*/
-    static bool DelayHasPassed(unsigned long &previousTime, int delay)
+    static bool delayHasPassed(unsigned long &previousTime, int delay)
     {
         unsigned long currentTime = millis();
 

@@ -250,19 +250,19 @@ void Screen::StartMenu()
 
 void Screen::drawBlind(int distance)
 {
-    if (util->DelayHasPassed(previousTime, refreshTime))
+    if (util->delayHasPassed(previousTime, refreshTime))
         this->drawDistance(distance);
 }
 
 void Screen::drawMeasuring(int distance)
 {
-    if (util->DelayHasPassed(previousTime, refreshTime))
+    if (util->delayHasPassed(previousTime, refreshTime))
         this->drawDistance(distance);
 }
 
 void Screen::drawSocialDistance(int distance)
 {
-    if (util->DelayHasPassed(previousTime, refreshTime))
+    if (util->delayHasPassed(previousTime, refreshTime))
         this->drawDistance(distance);
 }
 

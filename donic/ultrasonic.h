@@ -42,10 +42,6 @@ class Ultrasonic {
 
             #endif
 
-            #ifdef ULTRASONE
-            String distanceInput = Serial.readStringUntil('\n');
-            dist = distanceInput.toInt();
-            #endif
             #ifdef VERBOSE
             Serial.print("SONIC distance: ");
             Serial.println(dist);
