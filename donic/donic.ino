@@ -8,7 +8,7 @@
 //#define VERBOSE
 
 //define this if you dont want to use ULTRASONE sensor
-//#define ULTRASONE
+#define ULTRASONE
 
 //define this if you just want to test with the joystick
 //#define JOYSTICK
@@ -36,7 +36,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 Joystick joystick(JOYSW, JOYX, JOYY);
 Ultrasonic sonic(ECHO, TRIG);
 Screen screen(&lcd, &joystick, &sonic, &util);
-Motor motor(MOTOR);
+Motor motor(MOTOR, &util);
 Buzzer buzzer(BUZZER);
 
 int mode, distance;
@@ -92,6 +92,13 @@ void loop() {
     #ifndef ULTRASONE
     distance = sonic.distance();
     #endif
+    #ifdef ULTRASONE
+    if (Serial.available() > 0)
+    {
+        String distanceInput = Serial.readStringUntil('\n');
+        distance = distanceInput.toInt();
+    }
+    #endif
 
     joystick.readValues();
     
@@ -99,11 +106,12 @@ void loop() {
     {
     case 0:
         screen.drawBlind(distance);
+        motor.vibrateOnDistance(distance);
         break;
-    case 1: //Measuring
+    case 1:
         screen.drawMeasuring(distance);
         break;
-    case 2: //SocialDistance
+    case 2:
         screen.drawSocialDistance(distance);
         break;
     default:
@@ -116,6 +124,7 @@ void loop() {
 
     if(joystick.getPressed())
     {
+        motor.startStop(false);
         screen.StartMenu();
     }
 }
