@@ -8,7 +8,7 @@
 //#define VERBOSE
 
 //define this if you dont want to use ULTRASONE sensor
-#define ULTRASONE
+//#define ULTRASONE
 
 //define this if you just want to test with the joystick
 //#define JOYSTICK
@@ -46,8 +46,6 @@ void setup() {
     Serial.begin(9600);
     motor.init();
   
-    motor.burst(300, 10);   
-     
     screen.init();
     joystick.init();
     screen.drawWelcome();

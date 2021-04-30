@@ -9,6 +9,8 @@ class Motor {
         unsigned long previousTime = 0;
         bool vibrating = false;
         Util *util;
+        int _delay = 100;
+        //int delays[] = {100, 200, 300, 400, 500};
     public:
         Motor(int motorPin, Util *Util)
         {
@@ -52,7 +54,7 @@ void Motor::burst(int del, int bursts)
     Serial.print("MOTOR burst: delay = ");
     Serial.print(del);
     Serial.print(" amt of bursts = ");
-    Serial.println(burst);
+    Serial.println(bursts);
     #endif
     for(int i = 0; i < bursts; i++)
     {
@@ -64,44 +66,26 @@ void Motor::burst(int del, int bursts)
         delay(del);
     }
 }
-// use in loop. God may save us all
 void Motor::vibrateOnDistance(int distance, bool metric = true)
 {
-    int delay;
-    if (metric)
-    {
-        if (distance > 300)
-            return;
-        if (distance > 250)
-        {
-            delay = 10000;
-        }
-        else if (distance > 150)
-        {
-            delay = 5000;
-        }
-        else if (distance > 50)
-        {
-            delay = 1000;
-        }
-    }
-    else
-    {
+    if (util->delayHasPassed(previousTime, _delay)) {
+        vibrating = !vibrating;
+        digitalWrite(pin, vibrating);
 
-    }
-
-    if (util->delayHasPassed(previousTime, delay)) {
-        if (vibrating)
+        if (metric)
         {
-            digitalWrite(pin, LOW);
-            vibrating = false;
+            // if (distance > 300 || distance < 15)
+            //     return;
+
+            _delay = map(distance, 0, 450, 100, 500);
+            //delay = delays[ceil(distance/100.0)];
         }
         else
         {
-            digitalWrite(pin, HIGH);
-            vibrating = true;
+
         }
     }
+
 }
 
 #endif
