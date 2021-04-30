@@ -42,6 +42,7 @@ Buzzer buzzer(BUZZER);
 int mode, distance;
 
 void setup() {
+    buzzer.init();
     Serial.begin(9600);
     motor.init();
   
