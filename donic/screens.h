@@ -14,6 +14,7 @@ private:
     Joystick *joystick;
     Ultrasonic *sonic;
     Util *util;
+
 public:
     int mode = 0, refreshTime = 500;
     unsigned long previousTime = 0;
@@ -180,12 +181,12 @@ void Screen::StartMenu()
     bool pressed = false;
 
     // Initialize custom characters and draw first screen
-    lcd->createChar(0 , sunglasses1[0]);
-    lcd->createChar(1 , sunglasses1[1]);
-    lcd->createChar(2 , ruler1[0]);
-    lcd->createChar(3 , ruler1[1]);
+    lcd->createChar(0, sunglasses1[0]);
+    lcd->createChar(1, sunglasses1[1]);
+    lcd->createChar(2, ruler1[0]);
+    lcd->createChar(3, ruler1[1]);
     for (int i = 0; i < 4; i++)
-        lcd->createChar(i+4 ,virus[i]);
+        lcd->createChar(i + 4, virus[i]);
 
     this->drawStartMenu(index);
 
@@ -197,7 +198,7 @@ void Screen::StartMenu()
             joystick->readValues();
             direction = joystick->getDirection();
             pressed = joystick->getPressed();
-            
+
         } while (!(direction == 0 || direction == 2) && pressed != true);
         if (pressed == true)
         {
@@ -221,11 +222,11 @@ void Screen::StartMenu()
                 break;
             }
 
-            #ifdef VERBOSE
+#ifdef VERBOSE
             Serial.print("Mode selection: ");
             Serial.println(index);
-            #endif
-            
+#endif
+
             if (index != previous)
             {
                 // lcd->setCursor(0, 1);
@@ -239,10 +240,10 @@ void Screen::StartMenu()
         delay(500);
     }
 
-    #ifdef VERBOSE
+#ifdef VERBOSE
     Serial.print("Selected mode: ");
     Serial.println(index);
-    #endif
+#endif
 
     mode = index;
 };
