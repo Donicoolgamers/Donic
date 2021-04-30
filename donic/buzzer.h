@@ -1,7 +1,7 @@
 #ifndef buzzer_h
 #define buzzer_h
 
-#include <pitches.h>
+#include "pitches.h"
 
 class Buzzer
 {

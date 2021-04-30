@@ -50,7 +50,6 @@ void setup() {
      
     screen.init();
     joystick.init();
-    buzzer.playSound()
     screen.drawWelcome();
     delay(1000);
 
