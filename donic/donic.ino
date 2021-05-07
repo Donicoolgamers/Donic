@@ -40,9 +40,10 @@ Screen screen(&lcd, &joystick, &sonic, &util);
 Motor motor(MOTOR, &util);
 Buzzer buzzer(BUZZER);
 
-int mode, distance;
+int mode, distance, savedDistance = 0;
 
-void setup() {
+void setup()
+{
     buzzer.init();
     Serial.begin(9600);
     motor.init();
@@ -72,7 +73,8 @@ void setup() {
     screen.StartMenu();
 }
 
-void loop() {
+void loop()
+{
     #ifdef JOYSTICK
     joystick.readValues();
     
@@ -105,12 +107,32 @@ void loop() {
     case 0:
         screen.drawBlind(distance);
         motor.vibrateOnDistance(distance);
+        if(joystick.getPressed())
+        {
+            screen.StartMenu();
+        }
         break;
     case 1:
-        screen.drawMeasuring(distance);
+        screen.drawMeasuring(distance, savedDistance);
+        if (joystick.getPressed())
+        {
+            if (screen.drawSaveDistance(distance) == 0)
+            {
+                savedDistance = distance;
+            }
+            else
+            {
+                screen.StartMenu();
+            }
+        }
         break;
     case 2:
         screen.drawSocialDistance(distance);
+        motor.vibrateOnDistance(distance, true, 150);
+        if(joystick.getPressed())
+        {
+            screen.StartMenu();
+        }
         break;
     default:
         lcd.clear();
@@ -118,10 +140,5 @@ void loop() {
         delay(1000);
         screen.StartMenu();
         break;
-    }
-
-    if(joystick.getPressed())
-    {
-        screen.StartMenu();
     }
 }
