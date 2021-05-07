@@ -46,7 +46,6 @@ void setup() {
     buzzer.init();
     Serial.begin(9600);
     motor.init();
-
     screen.init();
     joystick.init();
     screen.drawWelcome();
