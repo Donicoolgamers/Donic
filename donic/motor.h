@@ -30,13 +30,7 @@ class Motor : public Servo{
         void vibrateOnDistance(int, bool);
 };
 
-void Motor::startStop(bool start = false)
-{
-    if (start)
-        digitalWrite(pin, HIGH);
-    else
-        digitalWrite(pin, LOW);
-}
+
 
 void Motor::vibrate(int time)
 {
@@ -44,11 +38,8 @@ void Motor::vibrate(int time)
     Serial.print("MOTOR vibrate: time = ");
     Serial.println(time);
     #endif
-    digitalWrite(pin, HIGH);
-    vibrating = true;
-    delay(time);
-    digitalWrite(pin, LOW);
-    vibrating = false;
+    this->write(50);
+    
 }
 
 void Motor::burst(int del, int bursts)
@@ -61,19 +52,18 @@ void Motor::burst(int del, int bursts)
     #endif
     for(int i = 0; i < bursts; i++)
     {
-        digitalWrite(pin, HIGH);
-        vibrating = true;
-        delay(del);
-        digitalWrite(pin, LOW);
-        vibrating = false;
-        delay(del);
+        this->write(50);
+        
     }
 }
 void Motor::vibrateOnDistance(int distance, bool metric = true)
 {
+    digitalWrite(pin, LOW);
     if (util->delayHasPassed(previousTime, _delay)) {
+        Serial.print("hello");
         vibrating = !vibrating;
-        digitalWrite(pin, vibrating);
+        digitalWrite(pin, HIGH);
+        
 
         if (metric)
         {
