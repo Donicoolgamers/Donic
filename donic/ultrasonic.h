@@ -39,7 +39,7 @@ class Ultrasonic {
                 dist = time * 0.034/2;
             else
                 dist = time * 0.0133/2;
-
+            dist = map(dist, 0,500, 0, 450);
             #endif
 
             #ifdef VERBOSE
