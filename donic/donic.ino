@@ -1,3 +1,4 @@
+
 /*
     Donic Arduino project
 
@@ -46,7 +47,6 @@ void setup() {
     Serial.begin(9600);
     motor.init();
   
-    motor.burst(300, 10);
     buzzer.playNote(100, 300);
      
     screen.init();

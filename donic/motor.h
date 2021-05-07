@@ -2,8 +2,11 @@
 #define motor_h
 
 #include "util.h"
+#include <Servo.h>
 
-class Motor {
+
+
+class Motor : public Servo{
     private:
         int pin;
         unsigned long previousTime = 0;
@@ -17,7 +20,7 @@ class Motor {
         }
         void init()
         {
-            pinMode(pin, OUTPUT);
+            this->attach(pin);
         }
         void startStop(bool);
         void vibrate(int);
