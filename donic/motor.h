@@ -12,7 +12,7 @@ class Motor : public Servo{
         Util *util;
         int _delay = 100;
         bool turned = true;
-        //int delays[] = {100, 200, 300, 400, 500};
+        int delays[5] = {100, 350, 450, 550, 650};
     public:
         Motor(int motorPin, Util *Util)
         {
@@ -66,7 +66,7 @@ void Motor::burst(int del, int bursts)
 
 void Motor::vibrateOnDistance(int currentDistance, bool metric = true, int limit = -1)
 {
-    if(limit == -1)
+ /*  if(limit == -1)
     {
         digitalWrite(pin, LOW);
         if (util->delayHasPassed(previousTime, _delay)) {
@@ -98,7 +98,14 @@ void Motor::vibrateOnDistance(int currentDistance, bool metric = true, int limit
                 _delay = 1000;
             }
         }
+    } */
+
+
+    if (util->delayHasPassed(previousTime, _delay)) {
+        _delay = map(currentDistance, 0, 450, 100, 500);
+        _delay = ceil(_delay/100.0);
+        _delay = delays[_delay];
+        this->vibrate(20);
     }
 }
-
 #endif
