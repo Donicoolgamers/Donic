@@ -19,6 +19,7 @@
 #include "screens.h"
 #include "buzzer.h"
 #include "motor.h"
+#include "util.h"
 
 // Pin setup
 #define ECHO 11
@@ -32,6 +33,8 @@
 
 #define BUZZER 9
 
+#define AVERAGELENGTH 10
+
 Util util;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 Joystick joystick(JOYSW, JOYX, JOYY);
@@ -40,7 +43,9 @@ Screen screen(&lcd, &joystick, &sonic, &util);
 Motor motor(MOTOR, &util);
 Buzzer buzzer(BUZZER);
 
-int mode, distance, savedDistance = 0;
+int mode, distance, savedDistance, position,average = 0;
+
+int measurements[AVERAGELENGTH] = {0};
 
 void setup()
 {
@@ -89,7 +94,19 @@ void loop()
     #endif
 
     #ifndef ULTRASONE
-    distance = sonic.distance();
+        distance = sonic.distance();
+        measurements[position] = distance;
+        position++;
+        if(position == AVERAGELENGTH)
+        {
+            position = 0;
+        }
+        average = 0;
+        for(int a = 0; a < AVERAGELENGTH; a++)
+        {
+            average += measurements[a];
+        }
+        average = average/AVERAGELENGTH;
     #endif
     #ifdef ULTRASONE
     if (Serial.available() > 0)
@@ -104,20 +121,20 @@ void loop()
     switch (screen.mode)
     {
     case 0:
-        screen.drawBlind(distance);
-        motor.vibrateOnDistance(distance);
+        screen.drawBlind(average);
+        motor.vibrateOnDistance(average);
         if(joystick.getPressed())
         {
             screen.StartMenu();
         }
         break;
     case 1:
-        screen.drawMeasuring(distance, savedDistance);
+        screen.drawMeasuring(average, savedDistance);
         if (joystick.getPressed())
         {
-            if (screen.drawSaveDistance(distance) == 0)
+            if (screen.drawSaveDistance(average) == 0)
             {
-                savedDistance = distance;
+                savedDistance = average;
             }
             else
             {
@@ -126,8 +143,8 @@ void loop()
         }
         break;
     case 2:
-        screen.drawSocialDistance(distance);
-        motor.vibrateOnDistance(distance, true, 150);
+        screen.drawSocialDistance(average);
+        motor.vibrateOnDistance(average, true, 150);
         if(joystick.getPressed())
         {
             screen.StartMenu();

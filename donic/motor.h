@@ -13,7 +13,7 @@ class Motor : public Servo{
         bool vibrating = false;
         Util *util;
         int _delay = 100;
-        //int delays[] = {100, 200, 300, 400, 500};
+        int delays[5] = {100, 200, 300, 400, 500};
     public:
         Motor(int motorPin, Util *Util)
         {
@@ -32,7 +32,7 @@ class Motor : public Servo{
 
 
 
-void Motor::vibrate(int time)
+void Motor::vibrate(int amount)
 {
     #ifdef VERBOSE
     Serial.print("MOTOR vibrate: time = ");
@@ -59,7 +59,7 @@ void Motor::burst(int del, int bursts)
 
 void Motor::vibrateOnDistance(int currentDistance, bool metric = true, int limit = -1)
 {
-    if(limit == -1)
+  if(limit == -1)
     {
         digitalWrite(pin, LOW);
         if (util->delayHasPassed(previousTime, _delay)) {
@@ -92,6 +92,6 @@ void Motor::vibrateOnDistance(int currentDistance, bool metric = true, int limit
             }
         }
     }
-}
 
+}
 #endif
