@@ -235,12 +235,13 @@ void Screen::drawStartMenu(int option)
     switch (option)
     {
     case 0:
-        
         lcd->write(byte(0));
         lcd->write(byte(1));
         lcd->print(" Blind");
         lcd->setCursor(2, 1);
         lcd->print("/  mode");
+        // Vibrate for blind people
+        motor->vibrate(25);
         break;
     case 1:
         lcd->write(byte(2));

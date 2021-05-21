@@ -4,8 +4,6 @@
 #include "util.h"
 #include <Servo.h>
 
-
-
 class Motor : public Servo{
     private:
         int pin;
@@ -13,6 +11,7 @@ class Motor : public Servo{
         bool vibrating = false;
         Util *util;
         int _delay = 100;
+        bool turned = true;
         //int delays[] = {100, 200, 300, 400, 500};
     public:
         Motor(int motorPin, Util *Util)
@@ -32,14 +31,22 @@ class Motor : public Servo{
 
 
 
-void Motor::vibrate(int time)
+void Motor::vibrate(int degrees)
 {
+    Serial.print("test");
     #ifdef VERBOSE
     Serial.print("MOTOR vibrate: time = ");
     Serial.println(time);
     #endif
-    this->write(50);
-    
+    if(turned)
+    {
+        this->write(degrees);
+    }
+    else
+    {
+        this->write(0);
+    }
+    turned = !turned;
 }
 
 void Motor::burst(int del, int bursts)
