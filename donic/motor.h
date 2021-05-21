@@ -11,12 +11,8 @@ class Motor : public Servo{
         bool vibrating = false;
         Util *util;
         int _delay = 100;
-<<<<<<< HEAD
-        int delays[5] = {100, 200, 300, 400, 500};
-=======
         bool turned = true;
-        //int delays[] = {100, 200, 300, 400, 500};
->>>>>>> b27069a4f3c3fa729d41fa9077a4e5f4382b955c
+        int delays[5] = {100, 350, 450, 550, 650};
     public:
         Motor(int motorPin, Util *Util)
         {
@@ -35,11 +31,7 @@ class Motor : public Servo{
 
 
 
-<<<<<<< HEAD
-void Motor::vibrate(int amount)
-=======
 void Motor::vibrate(int degrees)
->>>>>>> b27069a4f3c3fa729d41fa9077a4e5f4382b955c
 {
     Serial.print("test");
     #ifdef VERBOSE
@@ -74,7 +66,7 @@ void Motor::burst(int del, int bursts)
 
 void Motor::vibrateOnDistance(int currentDistance, bool metric = true, int limit = -1)
 {
-  if(limit == -1)
+ /*  if(limit == -1)
     {
         digitalWrite(pin, LOW);
         if (util->delayHasPassed(previousTime, _delay)) {
@@ -106,7 +98,14 @@ void Motor::vibrateOnDistance(int currentDistance, bool metric = true, int limit
                 _delay = 1000;
             }
         }
-    }
+    } */
 
+
+    if (util->delayHasPassed(previousTime, _delay)) {
+        _delay = map(currentDistance, 0, 450, 100, 500);
+        _delay = ceil(_delay/100.0);
+        _delay = delays[_delay];
+        this->vibrate(20);
+    }
 }
 #endif
