@@ -4,26 +4,26 @@
 #include "LiquidCrystal_I2C.h"
 #include "chars.h"
 #include "joystick.h"
-#include "ultrasonic.h"
 #include "util.h"
+#include "motor.h"
 
 class Screen
 {
 private:
     LiquidCrystal_I2C *lcd;
     Joystick *joystick;
-    Ultrasonic *sonic;
     Util *util;
+    Motor *motor;
 
 public:
     int mode = 0, refreshTime = 500;
     unsigned long previousTime = 0;
-    Screen(LiquidCrystal_I2C *LCD, Joystick *Joystick, Ultrasonic *Sonic, Util *Util)
+    Screen(LiquidCrystal_I2C *LCD, Joystick *Joystick, Motor *Motor, Util *Util)
     {
         lcd = LCD;
         joystick = Joystick;
-        sonic = Sonic;
         util = Util;
+        motor = Motor;
     };
     void init()
     {
@@ -235,6 +235,7 @@ void Screen::drawStartMenu(int option)
     switch (option)
     {
     case 0:
+        
         lcd->write(byte(0));
         lcd->write(byte(1));
         lcd->print(" Blind");

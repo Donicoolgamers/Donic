@@ -36,9 +36,9 @@ Util util;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 Joystick joystick(JOYSW, JOYX, JOYY);
 Ultrasonic sonic(ECHO, TRIG);
-Screen screen(&lcd, &joystick, &sonic, &util);
 Motor motor(MOTOR, &util);
 Buzzer buzzer(BUZZER);
+Screen screen(&lcd, &joystick, &motor, &util);
 
 int mode, distance, savedDistance = 0;
 
