@@ -39,9 +39,10 @@ public:
     void drawLoadingbar(int progress, int start = 0, int end = 100);
     void drawBar(int progress, int start = 0, int end = 100);
     void drawDistance(int distance);
+    int drawSaveDistance(int);
     void drawStartMenu(int option);
     void drawBlind(int distance);
-    void drawMeasuring(int distance);
+    void drawMeasuring(int distance, int);
     void drawSocialDistance(int distance);
 };
 
@@ -130,6 +131,93 @@ void Screen::drawDistance(int distance)
     }
 
     this->drawBar(distance, 0, 450);
+}
+
+int Screen::drawSaveDistance(int distance)
+{
+    int index = 0;
+    int previous = 0;
+    bool selected = false;
+    int direction;
+    bool pressed = false;
+
+    lcd->clear();
+    lcd->write(byte(0b01111110));
+    lcd->print("Save (");
+    lcd->print(distance);
+    lcd->print("cm)");
+    lcd->setCursor(0, 1);
+    lcd->print(" Back to menu");
+    delay(200);
+
+    // logic
+    while (!selected)
+    {
+        do
+        {
+            joystick->readValues();
+            direction = joystick->getDirection();
+            pressed = joystick->getPressed();
+        } while (!(direction == 1 || direction == 3) && pressed != true);
+        if (pressed == true)
+        {
+            selected = true;
+        }
+        else
+        {
+            if (direction != 4)
+            {
+                index = !index;
+                if (!index)
+            {
+                lcd->clear();
+                lcd->write(byte(0b01111110));
+                lcd->print("Save (");
+                lcd->print(distance);
+                lcd->print("cm)");
+                lcd->setCursor(0, 1);
+                lcd->print(" Back to menu");
+            }
+            else
+            {
+                lcd->clear();
+                lcd->print(" Save (");
+                lcd->print(distance);
+                lcd->print("cm)");
+                lcd->setCursor(0, 1);
+                lcd->write(byte(0b01111110));
+                lcd->print("Back to menu");
+            }
+                //index = !index;
+
+            delay(200);
+            }
+        }
+
+#ifdef VERBOSE
+        Serial.print("Selected: ");
+        Serial.println(index);
+#endif
+Serial.print("Selected: ");
+        Serial.println(index);
+
+        if (index != previous)
+        {
+            
+        }
+        Serial.print("Selected: ");
+        Serial.println(index);
+    }
+    delay(500);
+
+#ifdef VERBOSE
+    Serial.print("Selected mode: ");
+    Serial.println(index);
+#endif
+ Serial.print("Selected mode: ");
+    Serial.println(index);
+    lcd->clear();
+    return index;
 }
 
 void Screen::drawStartMenu(int option)
@@ -244,20 +332,58 @@ void Screen::StartMenu()
     Serial.print("Selected mode: ");
     Serial.println(index);
 #endif
-
+    lcd->clear();
     mode = index;
 };
 
 void Screen::drawBlind(int distance)
 {
     if (util->delayHasPassed(previousTime, refreshTime))
-        this->drawDistance(distance);
+    {
+        lcd->setCursor(0, 0);
+        lcd->print("Distance: ");
+        lcd->setCursor(9, 0);
+        lcd->print("       ");
+        lcd->setCursor(10, 0);
+        if (distance > 500)
+        {
+            lcd->print("OoR");
+        }
+        else
+        {
+            lcd->print(distance);
+            lcd->print(" cm");
+        }
+
+        this->drawBar(distance, 0, 450);
+    }
 }
 
-void Screen::drawMeasuring(int distance)
+void Screen::drawMeasuring(int distance, int savedDistance)
 {
     if (util->delayHasPassed(previousTime, refreshTime))
-        this->drawDistance(distance);
+    {
+        lcd->setCursor(0, 0);
+        lcd->print("                ");
+        lcd->setCursor(0, 0);
+        if (distance > 500)
+        {
+            lcd->print("OoR");
+        }
+        else
+        {
+            lcd->print(distance);
+        }
+        lcd->setCursor(0, 1);
+        lcd->print("-               ");
+        lcd->setCursor(2, 1);
+        lcd->print(savedDistance);
+        lcd->print("cm = ");
+        lcd->print(distance - savedDistance);
+        lcd->print("cm");
+
+        //this->drawBar(distance, 0, 450);
+    }
 }
 
 void Screen::drawSocialDistance(int distance)

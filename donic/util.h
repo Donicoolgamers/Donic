@@ -49,7 +49,7 @@ class Util
         if (EEPROM.read(LASTADRESS) == 'I') // Already initialized at some point, read the current settings.
         {
             #ifdef VERBOSE
-            Serial.println("EEPROM: Init flag was set => reading settings.")
+            Serial.println("EEPROM: Init flag was set => reading settings.");
             #endif
             settings[SETTING0_METRIC] = EEPROM.read(SETTING0_METRIC);
             settings[SETTING1_BLINDMAXDISTANCE] = EEPROM.read(SETTING1_BLINDMAXDISTANCE);
@@ -58,7 +58,7 @@ class Util
         else // First startup/init. Set all default settings.
         {
             #ifdef VERBOSE
-            Serial.println("EEPROM: Init flag was NOT set => setting default settings and init flag.")
+            Serial.println("EEPROM: Init flag was NOT set => setting default settings and init flag.");
             #endif
             EEPROM.write(SETTING0_METRIC, settings[SETTING0_METRIC]);
             EEPROM.write(SETTING1_BLINDMAXDISTANCE, settings[SETTING1_BLINDMAXDISTANCE]);
@@ -70,7 +70,7 @@ class Util
     void updateSetting(int SettingAdress, byte value)
     {
         #ifdef VERBOSE
-        Serial.println("EEPROM: updating setting.")
+        Serial.println("EEPROM: updating setting.");
         #endif
         settings[SettingAdress] = value;
         EEPROM.update(SettingAdress, value);

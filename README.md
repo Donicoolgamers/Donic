@@ -20,11 +20,9 @@ Arduino project for sensing distance and giving feedback to the user.
 - VRy on pin A1
 - SW on pin 2
 
-### DC MOTOR
+### Servo motor
 
 - pin 3 
-
-![DC motor connection](https://www.tutorialspoint.com/arduino/images/dc_motor_connections.jpg)
 
 ### Buzzer
 

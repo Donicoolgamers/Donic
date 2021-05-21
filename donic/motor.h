@@ -27,7 +27,7 @@ class Motor : public Servo{
         void startStop(bool);
         void vibrate(int);
         void burst(int,int);
-        void vibrateOnDistance(int, bool);
+        void vibrateOnDistance(int, bool, int);
 };
 
 
@@ -56,29 +56,42 @@ void Motor::burst(int del, int bursts)
         
     }
 }
-void Motor::vibrateOnDistance(int distance, bool metric = true)
+
+void Motor::vibrateOnDistance(int currentDistance, bool metric = true, int limit = -1)
 {
-    digitalWrite(pin, LOW);
-    if (util->delayHasPassed(previousTime, _delay)) {
-        Serial.print("hello");
-        vibrating = !vibrating;
-        digitalWrite(pin, HIGH);
-        
+    if(limit == -1)
+    {
+        digitalWrite(pin, LOW);
+        if (util->delayHasPassed(previousTime, _delay)) {
+            vibrating = !vibrating;
+            digitalWrite(pin, HIGH);
+            
+            if (metric)
+            {
+                // if (distance > 300 || distance < 15)
+                //     return;
 
-        if (metric)
-        {
-            // if (distance > 300 || distance < 15)
-            //     return;
+                _delay = map(currentDistance, 0, 450, 100, 500);
+                //delay = delays[ceil(distance/100.0)];
+            }
+            else
+            {
 
-            _delay = map(distance, 0, 450, 100, 500);
-            //delay = delays[ceil(distance/100.0)];
-        }
-        else
-        {
-
+            }
         }
     }
-
+    else
+    {
+        digitalWrite(pin, LOW);
+        if (currentDistance < limit)
+        {
+            if (util->delayHasPassed(previousTime, _delay)) {
+                vibrating = !vibrating;
+                digitalWrite(pin, HIGH);
+                _delay = 1000;
+            }
+        }
+    }
 }
 
 #endif
