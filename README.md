@@ -22,7 +22,7 @@ Arduino project for sensing distance and giving feedback to the user.
 
 ### DC MOTOR
 
-- pin 3 (the cables go to a diode)
+- pin 3 
 
 ![DC motor connection](https://www.tutorialspoint.com/arduino/images/dc_motor_connections.jpg)
 
