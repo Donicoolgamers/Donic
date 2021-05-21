@@ -340,6 +340,7 @@ void Screen::StartMenu()
 
 void Screen::drawBlind(int distance)
 {
+    lcd->noBacklight();
     if (util->delayHasPassed(previousTime, refreshTime))
     {
         lcd->setCursor(0, 0);
@@ -368,6 +369,8 @@ void Screen::drawMeasuring(int distance, int savedDistance)
         lcd->setCursor(0, 0);
         lcd->print("                ");
         lcd->setCursor(0, 0);
+        lcd->write(byte(2));
+        lcd->write(byte(3));
         if (distance > 500)
         {
             lcd->print("OoR");
@@ -375,12 +378,16 @@ void Screen::drawMeasuring(int distance, int savedDistance)
         else
         {
             lcd->print(distance);
+            lcd->print(" cm");
         }
-        lcd->setCursor(0, 1);
+        lcd->setCursor(8, 0);
         lcd->print("-               ");
-        lcd->setCursor(2, 1);
+        lcd->setCursor(10, 0);
         lcd->print(savedDistance);
-        lcd->print("cm = ");
+        lcd->print(" cm");
+        lcd->setCursor(0, 1);
+        lcd->print("=               ");
+        lcd->setCursor(2, 1);
         lcd->print(distance - savedDistance);
         lcd->print("cm");
 

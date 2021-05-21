@@ -108,6 +108,7 @@ void loop()
         motor.vibrateOnDistance(distance);
         if(joystick.getPressed())
         {
+            lcd.backlight();
             screen.StartMenu();
         }
         break;
