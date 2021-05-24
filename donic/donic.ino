@@ -45,7 +45,7 @@ Screen screen(&lcd, &joystick, &motor, &util);
 
 int mode, distance, savedDistance, position,average = 0;
 
-int measurements[AVERAGELENGTH] = {0};
+int measurements[AVERAGELENGTH] = {1};
 
 void setup()
 {
@@ -102,11 +102,22 @@ void loop()
             position = 0;
         }
         average = 0;
-        for(int a = 0; a < AVERAGELENGTH; a++)
+        util.bubbleSort(measurements,AVERAGELENGTH);
+          
+        int len = AVERAGELENGTH;
+     
+        for(int a = 1; a < AVERAGELENGTH-1; a++)
         {
-            average += measurements[a];
+           if(measurements[a] == 0)
+           {
+               len--;
+           }
+           else{
+                average += measurements[a];
+           }
         }
-        average = average/AVERAGELENGTH;
+
+        average = average/len;
     #endif
     #ifdef ULTRASONE
     if (Serial.available() > 0)
