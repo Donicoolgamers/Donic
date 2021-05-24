@@ -50,7 +50,7 @@ void Screen::drawWelcome()
 {
     lcd->print("Donic");
     lcd->setCursor(0, 1);
-    lcd->print("Welcome");
+    lcd->print("Welcome :)");
 };
 
 void Screen::drawLoadingbar(int progress, int start = 0, int end = 100)
