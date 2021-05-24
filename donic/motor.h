@@ -66,46 +66,20 @@ void Motor::burst(int del, int bursts)
 
 void Motor::vibrateOnDistance(int currentDistance, bool metric = true, int limit = -1)
 {
- /*  if(limit == -1)
+    if(limit == -1)
     {
-        digitalWrite(pin, LOW);
         if (util->delayHasPassed(previousTime, _delay)) {
-            vibrating = !vibrating;
-            digitalWrite(pin, HIGH);
-            
-            if (metric)
-            {
-                // if (distance > 300 || distance < 15)
-                //     return;
-
-                _delay = map(currentDistance, 0, 450, 100, 500);
-                //delay = delays[ceil(distance/100.0)];
-            }
-            else
-            {
-
-            }
+            _delay = map(currentDistance, 0, 450, 100, 500);
+            _delay = ceil(_delay/100.0);
+            _delay = delays[_delay];
+            this->vibrate(20);
         }
     }
     else
     {
-        digitalWrite(pin, LOW);
-        if (currentDistance < limit)
-        {
-            if (util->delayHasPassed(previousTime, _delay)) {
-                vibrating = !vibrating;
-                digitalWrite(pin, HIGH);
-                _delay = 1000;
-            }
+        if (util->delayHasPassed(previousTime, 300) && currentDistance < limit) {
+            this->vibrate(20);
         }
-    } */
-
-
-    if (util->delayHasPassed(previousTime, _delay)) {
-        _delay = map(currentDistance, 0, 450, 100, 500);
-        _delay = ceil(_delay/100.0);
-        _delay = delays[_delay];
-        this->vibrate(20);
     }
 }
 #endif
