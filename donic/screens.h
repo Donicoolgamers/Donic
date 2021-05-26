@@ -169,28 +169,28 @@ int Screen::drawSaveDistance(int distance)
             {
                 index = !index;
                 if (!index)
-            {
-                lcd->clear();
-                lcd->write(byte(0b01111110));
-                lcd->print("Save (");
-                lcd->print(distance);
-                lcd->print("cm)");
-                lcd->setCursor(0, 1);
-                lcd->print(" Back to menu");
-            }
-            else
-            {
-                lcd->clear();
-                lcd->print(" Save (");
-                lcd->print(distance);
-                lcd->print("cm)");
-                lcd->setCursor(0, 1);
-                lcd->write(byte(0b01111110));
-                lcd->print("Back to menu");
-            }
+                {
+                    lcd->clear();
+                    lcd->write(byte(0b01111110));
+                    lcd->print("Save (");
+                    lcd->print(distance);
+                    lcd->print("cm)");
+                    lcd->setCursor(0, 1);
+                    lcd->print(" Back to menu");
+                }
+                else
+                {
+                    lcd->clear();
+                    lcd->print(" Save (");
+                    lcd->print(distance);
+                    lcd->print("cm)");
+                    lcd->setCursor(0, 1);
+                    lcd->write(byte(0b01111110));
+                    lcd->print("Back to menu");
+                }
                 //index = !index;
 
-            delay(200);
+                delay(200);
             }
         }
 
@@ -198,12 +198,11 @@ int Screen::drawSaveDistance(int distance)
         Serial.print("Selected: ");
         Serial.println(index);
 #endif
-Serial.print("Selected: ");
+        Serial.print("Selected: ");
         Serial.println(index);
 
         if (index != previous)
         {
-            
         }
         Serial.print("Selected: ");
         Serial.println(index);
@@ -214,7 +213,7 @@ Serial.print("Selected: ");
     Serial.print("Selected mode: ");
     Serial.println(index);
 #endif
- Serial.print("Selected mode: ");
+    Serial.print("Selected mode: ");
     Serial.println(index);
     lcd->clear();
     return index;
@@ -319,10 +318,6 @@ void Screen::StartMenu()
 
             if (index != previous)
             {
-                // lcd->setCursor(0, 1);
-                // lcd->print("               ");
-                // lcd->setCursor(0, 1);
-                // lcd->print(options[index]);
                 previous = index;
                 this->drawStartMenu(index);
             }
@@ -391,7 +386,6 @@ void Screen::drawMeasuring(int distance, int savedDistance)
         lcd->print(distance - savedDistance);
         lcd->print("cm");
 
-        //this->drawBar(distance, 0, 450);
     }
 }
 

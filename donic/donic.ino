@@ -14,10 +14,8 @@
 //define this if you just want to test with the joystick
 //#define JOYSTICK
 
-
 #include "ultrasonic.h"
 #include "screens.h"
-#include "buzzer.h"
 #include "motor.h"
 #include "util.h"
 
@@ -40,16 +38,14 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 Joystick joystick(JOYSW, JOYX, JOYY);
 Ultrasonic sonic(ECHO, TRIG);
 Motor motor(MOTOR, &util);
-Buzzer buzzer(BUZZER);
 Screen screen(&lcd, &joystick, &motor, &util);
 
-int mode, distance, savedDistance, position,average = 0;
+int mode, distance, savedDistance, position, average = 0;
 
 int measurements[AVERAGELENGTH] = {1};
 
 void setup()
 {
-    buzzer.init();
     Serial.begin(9600);
     motor.init();
     screen.init();
@@ -57,31 +53,31 @@ void setup()
     screen.drawWelcome();
     delay(1000);
 
-    // Ultrasonic sensor
-    #ifndef ULTRASONE
+// Ultrasonic sensor
+#ifndef ULTRASONE
     sonic.init();
-    #endif
+#endif
 
-    #ifdef VERBOSE
+#ifdef VERBOSE
     Serial.println("--------------------DEBUG MODE : verbose output-------------------------");
-    #endif
+#endif
 
-    #ifdef ULTRASONE
+#ifdef ULTRASONE
     Serial.println("--------------------DEBUG MODE : no ultrasone sensor--------------------");
-    #endif
+#endif
 
-    #ifdef JOYSTICK
+#ifdef JOYSTICK
     Serial.println("--------------------DEBUG MODE : joystick debugging---------------------");
-    #endif
+#endif
 
     screen.StartMenu();
 }
 
 void loop()
 {
-    #ifdef JOYSTICK
+#ifdef JOYSTICK
     joystick.readValues();
-    
+
     Serial.print("x: ");
     Serial.print(joystick.getX());
     Serial.print("\n");
@@ -91,50 +87,51 @@ void loop()
     Serial.print("pressed: ");
     Serial.print(joystick.getPressed());
     Serial.print("\n");
-    #endif
+#endif
 
-    #ifndef ULTRASONE
-        distance = sonic.distance();
-        measurements[position] = distance;
-        position++;
-        if(position == AVERAGELENGTH)
-        {
-            position = 0;
-        }
-        average = 0;
-        util.bubbleSort(measurements,AVERAGELENGTH);
-          
-        int len = AVERAGELENGTH;
-     
-        for(int a = 1; a < AVERAGELENGTH-1; a++)
-        {
-           if(measurements[a] == 0)
-           {
-               len--;
-           }
-           else{
-                average += measurements[a];
-           }
-        }
+#ifndef ULTRASONE
+    distance = sonic.distance();
+    measurements[position] = distance;
+    position++;
+    if (position == AVERAGELENGTH)
+    {
+        position = 0;
+    }
+    average = 0;
+    util.bubbleSort(measurements, AVERAGELENGTH);
 
-        average = average/len;
-    #endif
-    #ifdef ULTRASONE
+    int len = AVERAGELENGTH;
+
+    for (int a = 1; a < AVERAGELENGTH - 1; a++)
+    {
+        if (measurements[a] == 0)
+        {
+            len--;
+        }
+        else
+        {
+            average += measurements[a];
+        }
+    }
+
+    average = average / len;
+#endif
+#ifdef ULTRASONE
     if (Serial.available() > 0)
     {
         String distanceInput = Serial.readStringUntil('\n');
         distance = distanceInput.toInt();
     }
-    #endif
+#endif
 
     joystick.readValues();
-    
+
     switch (screen.mode)
     {
     case 0:
         screen.drawBlind(average);
         motor.vibrateOnDistance(average);
-        if(joystick.getPressed())
+        if (joystick.getPressed())
         {
             lcd.backlight();
             screen.StartMenu();
@@ -157,7 +154,7 @@ void loop()
     case 2:
         screen.drawSocialDistance(average);
         motor.vibrateOnDistance(average, true, 150);
-        if(joystick.getPressed())
+        if (joystick.getPressed())
         {
             screen.StartMenu();
         }
