@@ -2,7 +2,7 @@
 #define motor_h
 
 #include "util.h"
-#include <Servo.h>
+#include <Servo.h> // Servo by Michael Margolis, Arduino Version 1.1.7
 
 class Motor : public Servo{
     private:
@@ -35,7 +35,7 @@ void Motor::vibrate(int degrees)
 {
     Serial.print("test");
     #ifdef VERBOSE
-    Serial.print("MOTOR vibrate: time = ");
+    Serial.print("MOTOR vibrate: degrees = ");
     Serial.println(time);
     #endif
     if(turned)

@@ -14,7 +14,6 @@
 //define this if you just want to test with the joystick
 //#define JOYSTICK
 
-
 #include "ultrasonic.h"
 #include "screens.h"
 #include "buzzer.h"
