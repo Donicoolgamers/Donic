@@ -23,7 +23,3 @@ Arduino project for sensing distance and giving feedback to the user.
 ### Servo motor
 
 - pin 3
-
-### Buzzer
-
-- pin 9
